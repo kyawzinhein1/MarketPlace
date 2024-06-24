@@ -1,8 +1,38 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
+import { loginUser, registerUser } from "../apicalls/auth";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Authform = ({ isLoginPage }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const handleOnFinish = async (values) => {
-    console.log(values);
+    setSubmitting(true);
+    if (isLoginPage) {
+      try {
+        const response = await loginUser(values);
+        if (response.isSuccess) {
+          message.success(response.message);
+          localStorage.setItem("token", response.token);
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (err) {
+        message.error(err.message);
+      }
+    } else {
+      try {
+        const response = await registerUser(values);
+        if (response.isSuccess) {
+          message.success(response.message);
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (err) {
+        message.error(err.message);
+      }
+    }
+    setSubmitting(false);
   };
   return (
     <section className="h-screen w-full flex items-center justify-center">
@@ -18,7 +48,11 @@ const Authform = ({ isLoginPage }) => {
               rules={[
                 {
                   required: true,
-                  message: "Name must be include.",
+                  message: "Name must contains.",
+                },
+                {
+                  min: 3,
+                  message: "Name must have 3 characters.",
                 },
               ]}
               hasFeedback
@@ -32,7 +66,7 @@ const Authform = ({ isLoginPage }) => {
             rules={[
               {
                 required: true,
-                message: "Email must be include.",
+                message: "Email must contain.",
               },
               {
                 type: "email",
@@ -49,7 +83,11 @@ const Authform = ({ isLoginPage }) => {
             rules={[
               {
                 required: true,
-                message: "Password must be include.",
+                message: "Password must contain.",
+              },
+              {
+                min: 5,
+                message: "Password must have 5 characters.",
               },
             ]}
             hasFeedback
@@ -60,10 +98,36 @@ const Authform = ({ isLoginPage }) => {
             <button
               type="submit"
               className="w-full outline-none bg-blue-500 text-white py-1 rounded-md"
+              disabled={submitting}
             >
-              Register
+              {isLoginPage && !submitting && "Login"}
+              {!isLoginPage && !submitting && "Register"}
+              {submitting && "Submitting"}
             </button>
           </Form.Item>
+          {isLoginPage ? (
+            <p>
+              Don't have an account ?
+              <Link
+                to={"/register"}
+                className="font-medium text-blue-600 hover:text-blue-600"
+              >
+                {" "}
+                Register here
+              </Link>
+            </p>
+          ) : (
+            <p>
+              Already have an account ?{" "}
+              <Link
+                to={"/login"}
+                className="font-medium text-blue-600 hover:text-blue-600"
+              >
+                {" "}
+                Login here
+              </Link>
+            </p>
+          )}
         </Form>
       </div>
     </section>
