@@ -1,8 +1,12 @@
-import { Checkbox, Col, Form, Row, Select, Input } from "antd";
+import { Checkbox, Col, Form, Row, Select, Input, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { SquaresPlusIcon } from "@heroicons/react/24/solid";
 
-const AddProduct = () => {
+import { SellProduct } from "../../apicalls/product";
+
+const AddProduct = ({ setActiveTabKey }) => {
+  const [form] = Form.useForm();
+
   const options = [
     {
       value: "Electronics",
@@ -37,6 +41,7 @@ const AddProduct = () => {
       label: "Watches",
     },
   ];
+
   const checkBoxOptions = [
     {
       value: "Accessories",
@@ -51,10 +56,26 @@ const AddProduct = () => {
       label: "Voucher",
     },
   ];
+
+  const onFinishHandler = async (values) => {
+    try {
+      const response = await SellProduct(values);
+      if (response.isSuccess) {
+        form.resetFields();
+        message.success(response.message);
+        setActiveTabKey("1");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
   return (
     <section>
       <h1 className="text-xl font-bold my-3">What you want to sell?</h1>
-      <Form layout="vertical">
+      <Form layout="vertical" onFinish={onFinishHandler} form={form}>
         <Form.Item
           name="product_name"
           label="Product Name"
@@ -129,11 +150,11 @@ const AddProduct = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item name="product_detail" label="Check if you have">
-          <Checkbox.Group options={checkBoxOptions} defaultValue={[""]} />
+        <Form.Item name="product_details" label="Check if you have">
+          <Checkbox.Group options={checkBoxOptions} defaultValue={[]} />
         </Form.Item>
         <button className="w-full bg-blue-500 text-white p-1 rounded-md flex items-center justify-center gap-1">
-          <SquaresPlusIcon width={30}/> Sell
+          <SquaresPlusIcon width={30} /> Sell
         </button>
       </Form>
     </section>
