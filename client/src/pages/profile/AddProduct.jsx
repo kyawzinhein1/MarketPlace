@@ -1,11 +1,23 @@
+import { useEffect, useState } from "react";
+
 import { Checkbox, Col, Form, Row, Select, Input, message } from "antd";
-import TextArea from "antd/es/input/TextArea";
 import { SquaresPlusIcon } from "@heroicons/react/24/solid";
+import TextArea from "antd/es/input/TextArea";
 
-import { SellProduct } from "../../apicalls/product";
+import {
+  SellProduct,
+  getOldProduct,
+  updateProduct,
+} from "../../apicalls/product";
 
-const AddProduct = ({ setActiveTabKey }) => {
+const AddProduct = ({
+  setActiveTabKey,
+  getProducts,
+  editMode,
+  editProductId,
+}) => {
   const [form] = Form.useForm();
+  const [sellerId, setSellerId] = useState(null);
 
   const options = [
     {
@@ -59,10 +71,19 @@ const AddProduct = ({ setActiveTabKey }) => {
 
   const onFinishHandler = async (values) => {
     try {
-      const response = await SellProduct(values);
+      let response;
+      if (editMode) {
+        values.seller_id = sellerId;
+        values.product_id = editProductId;
+        response = await updateProduct(values);
+      } else {
+        response = await SellProduct(values);
+      }
+
       if (response.isSuccess) {
         form.resetFields();
         message.success(response.message);
+        getProducts();
         setActiveTabKey("1");
       } else {
         throw new Error(response.message);
@@ -72,9 +93,49 @@ const AddProduct = ({ setActiveTabKey }) => {
     }
   };
 
+  const getOldProductData = async () => {
+    try {
+      const response = await getOldProduct(editProductId);
+      if (response.isSuccess) {
+        message.success("Edit mode on!!");
+        const { name, description, price, category, usedFor, details, seller } =
+          response.productDoc;
+        setSellerId(seller);
+
+        const modifiedProduct = {
+          product_name: name,
+          product_description: description,
+          product_price: price,
+          product_category: category,
+          product_used_for: usedFor,
+          product_details: [details],
+        };
+        form.setFieldsValue(modifiedProduct);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.log(err.message);
+      message.error(err.message);
+    }
+  };
+
+  useEffect(
+    (_) => {
+      if (editMode) {
+        getOldProductData();
+      } else {
+        form.resetFields();
+      }
+    },
+    [editMode]
+  );
+
   return (
     <section>
-      <h1 className="text-xl font-bold my-3">What you want to sell?</h1>
+      <h1 className="text-xl font-bold my-3">
+        {editMode ? "Update your product here." : "What you want to sell?"}
+      </h1>
       <Form layout="vertical" onFinish={onFinishHandler} form={form}>
         <Form.Item
           name="product_name"
@@ -151,10 +212,11 @@ const AddProduct = ({ setActiveTabKey }) => {
           </Col>
         </Row>
         <Form.Item name="product_details" label="Check if you have">
-          <Checkbox.Group options={checkBoxOptions} defaultValue={[]} />
+          <Checkbox.Group options={checkBoxOptions} defaultValue={[""]} />
         </Form.Item>
         <button className="w-full bg-blue-500 text-white p-1 rounded-md flex items-center justify-center gap-1">
-          <SquaresPlusIcon width={30} /> Sell
+          <SquaresPlusIcon width={30} />{" "}
+          {editMode ? "Update Product" : "Sell Product"}
         </button>
       </Form>
     </section>

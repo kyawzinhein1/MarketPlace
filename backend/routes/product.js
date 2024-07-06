@@ -9,33 +9,77 @@ const authMiddleware = require("../middlewares/auth");
 // add product
 //POST  /create-product
 router.post(
-    "/create-product", authMiddleware,
-    [
-        body("product_name")
-            .trim()
-            .notEmpty()
-            .withMessage("product name must have."),
-        body("product_price")
-            .trim()
-            .notEmpty()
-            .withMessage("product price must have."),
-        body("product_category")
-            .trim()
-            .notEmpty()
-            .withMessage("product category must have."),
-        body("product_description")
-            .trim()
-            .notEmpty()
-            .withMessage("product description must have."),
-        body("product_used_for")
-            .trim()
-            .notEmpty()
-            .withMessage("product userFor must have."),
-        body("product_details")
-            // .isArray()
-            // .withMessage("product details must array."),
-    ],
-    productController.addNewProduct
+  "/create-product",
+  authMiddleware,
+  [
+    body("product_name")
+      .trim()
+      .notEmpty()
+      .withMessage("product name must have."),
+    body("product_price")
+      .trim()
+      .notEmpty()
+      .withMessage("product price must have."),
+    body("product_category")
+      .trim()
+      .notEmpty()
+      .withMessage("product category must have."),
+    body("product_description")
+      .trim()
+      .notEmpty()
+      .withMessage("product description must have."),
+    body("product_used_for")
+      .trim()
+      .notEmpty()
+      .withMessage("product userFor must have."),
+    // body("product_details"),
+    // .isArray()
+    // .withMessage("product details must array."),
+  ],
+  productController.addNewProduct
 );
+
+// get all products
+// GET /products
+router.get("/products", authMiddleware, productController.getAllProducts);
+
+// get old products
+// GET /product/:id
+router.get("/products/:id", authMiddleware, productController.getOldProduct);
+
+// update product
+//POST /update-product
+router.post(
+  "/update-product",
+  [
+    body("product_name")
+      .trim()
+      .notEmpty()
+      .withMessage("product name must have."),
+    body("product_price")
+      .trim()
+      .notEmpty()
+      .withMessage("product price must have."),
+    body("product_category")
+      .trim()
+      .notEmpty()
+      .withMessage("product category must have."),
+    body("product_description")
+      .trim()
+      .notEmpty()
+      .withMessage("product description must have."),
+    body("product_used_for")
+      .trim()
+      .notEmpty()
+      .withMessage("product userFor must have."),
+  ],
+  authMiddleware,
+  productController.updateProduct
+);
+
+// delete product
+// DELETE /products/:id
+router.delete("/products/:id", authMiddleware, productController.deleteProduct);
+
 
 module.exports = router;

@@ -31,6 +31,7 @@ const Authform = ({ isLoginPage }) => {
         const response = await registerUser(values);
         if (response.isSuccess) {
           message.success(response.message);
+          navigate("/login");
         } else {
           throw new Error(response.message);
         }
