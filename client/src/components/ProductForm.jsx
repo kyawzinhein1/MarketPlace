@@ -8,9 +8,9 @@ import {
   SellProduct,
   getOldProduct,
   updateProduct,
-} from "../../apicalls/product";
+} from "../apicalls/product";
 
-const AddProduct = ({
+const ProductForm = ({
   setActiveTabKey,
   getProducts,
   editMode,
@@ -108,7 +108,7 @@ const AddProduct = ({
           product_price: price,
           product_category: category,
           product_used_for: usedFor,
-          product_details: [details],
+          product_details: details,
         };
         form.setFieldsValue(modifiedProduct);
       } else {
@@ -223,4 +223,4 @@ const AddProduct = ({
   );
 };
 
-export default AddProduct;
+export default ProductForm;
