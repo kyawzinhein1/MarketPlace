@@ -3,7 +3,7 @@ import { message } from "antd";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { uploadImages } from "../apicalls/product";
 
-const Upload = () => {
+const Upload = ({ editProductId, setActiveTabKey }) => {
   const [previewImages, setPreviewImages] = useState([]);
   const [images, setImages] = useState([]);
 
@@ -19,8 +19,20 @@ const Upload = () => {
   };
 
   const deleteHandler = (img) => {
-    setPreviewImages(previewImages.filter((element) => element !== img));
-    URL.revokeObjectURL(img);
+    const indexToDelete = previewImages.findIndex((e) => e === img);
+
+    if (indexToDelete !== -1) {
+      const updateSelectedImages = [...images];
+      updateSelectedImages.splice(indexToDelete, 1);
+
+      const updatedPreviewImages = [...previewImages];
+      updatedPreviewImages.splice(indexToDelete, 1);
+
+      setImages(updateSelectedImages);
+      setPreviewImages(updatedPreviewImages);
+
+      URL.revokeObjectURL(img);
+    }
   };
 
   const submitHandler = async (e) => {
@@ -31,10 +43,13 @@ const Upload = () => {
       formData.append("product_images", images[i]);
     }
 
+    formData.append("product_id", editProductId);
+
     try {
       const response = await uploadImages(formData);
       if (response.isSuccess) {
-        message.isSuccess(respons.message);
+        message.success(response.message);
+        setActiveTabKey("1");
       } else {
         throw new Error(response.message);
       }

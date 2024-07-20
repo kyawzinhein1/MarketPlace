@@ -1,5 +1,14 @@
 const { validationResult } = require("express-validator");
 const Product = require("../models/Product");
+const { v2: cloudinary } = require("cloudinary");
+require("dotenv").config();
+
+// Configuration
+cloudinary.config({
+  cloud_name: "dzovl9iej",
+  api_key: "654594813676114",
+  api_secret: process.env.CLOUD_API,
+});
 
 exports.addNewProduct = async (req, res) => {
   const errors = validationResult(req);
@@ -129,10 +138,37 @@ exports.deleteProduct = async (req, res) => {
 
   try {
     const productDoc = await Product.findOne({ _id: id });
+    if (!productDoc) {
+      return res.status(404).json({
+        isSuccess: false,
+        message: "product not found.",
+      });
+    }
 
     if (req.userId.toString() !== productDoc.seller.toString()) {
       throw new Error("Authorization failed.");
     }
+
+    if (productDoc.images && Array.isArray(productDoc.images)) {
+      const deletePromise = productDoc.images.map((img) => {
+        const publicId = img.substring(
+          img.lastIndexOf("/") + 1,
+          img.lastIndexOf(".")
+        );
+
+        return new Promise((resolve, reject) => {
+          cloudinary.uploader.destroy(publicId, (err, result) => {
+            if (err) {
+              reject(new Error("Destroy failed."));
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      });
+      await Promise.all(deletePromise);
+    }
+
     await Product.findByIdAndDelete(id);
 
     return res.status(200).json({
@@ -149,6 +185,36 @@ exports.deleteProduct = async (req, res) => {
 };
 
 exports.uploadProductImages = async (req, res) => {
-  console.log(req.files);
-  res.json(req.files);
+  const productImages = req.files;
+  const productId = req.body.product_id;
+  let secureUrlArray = [];
+
+  try {
+    productImages.forEach((img) => {
+      cloudinary.uploader.upload(img.path, async (err, result) => {
+        if (!err) {
+          const url = result.secure_url;
+          secureUrlArray.push(url);
+
+          if (productImages.length === secureUrlArray.length) {
+            await Product.findByIdAndUpdate(productId, {
+              $push: { images: secureUrlArray },
+            });
+            return res.status(200).json({
+              isSuccess: true,
+              message: "product images saved.",
+              secureUrlArray,
+            });
+          }
+        } else {
+          throw new Error("Cloud upload failed.");
+        }
+      });
+    });
+  } catch (error) {
+    return res.status(404).json({
+      isSuccess: false,
+      message: error.message,
+    });
+  }
 };
