@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { message } from "antd";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { uploadImages } from "../apicalls/product";
+import {
+  deleteSavedImages,
+  getSavedImages,
+  uploadImages,
+} from "../apicalls/product";
 
 const Upload = ({ editProductId, setActiveTabKey }) => {
   const [previewImages, setPreviewImages] = useState([]);
   const [images, setImages] = useState([]);
+  const [savedImages, setSavedImages] = useState([]);
+
+  const getImages = async (product_id) => {
+    try {
+      const response = await getSavedImages(product_id);
+      if (response.isSuccess) {
+        setSavedImages(response.data.images);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
+  useEffect((_) => {
+    getImages(editProductId);
+  }, []);
 
   const onChangeHandler = (event) => {
     const selectedImages = event.target.files;
@@ -58,11 +80,53 @@ const Upload = ({ editProductId, setActiveTabKey }) => {
     }
   };
 
+  const savedImagesDeleteHandler = async (img) => {
+    setSavedImages((prev) => prev.filter((e) => e !== img));
+
+    try {
+      const response = await deleteSavedImages({
+        productId: editProductId,
+        imgToDelete: img,
+      });
+
+      if (response.isSuccess) {
+        message.success(response.message);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
   return (
     <section>
       <h1 className="text-xl font-bold mt-3 my-6">
         Upload your product's images here.
       </h1>
+      <h1>Save images in cloud.</h1>
+      {savedImages.length > 0 ? (
+        <div className="flex gap-2 mt-2 mb-6">
+          {savedImages.map((e) => (
+            <div key={e} className="basis-1/6 h-32 relative">
+              <img
+                src={e}
+                alt={e}
+                className="w-full h-full rounded-md object-cover"
+              />
+              <TrashIcon
+                width={18}
+                className="absolute top-1 right-1 text-red-600 w-7 h-5 rounded-xl cursor-pointer hover:text-white hover:bg-red-600 transition-all"
+                onClick={() => {
+                  savedImagesDeleteHandler(e);
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <h1 className="text-red-600 mb-5">No product images are uploaded.</h1>
+      )}
       <form
         method="post"
         encType="multipart/form-data"
@@ -104,7 +168,7 @@ const Upload = ({ editProductId, setActiveTabKey }) => {
             ))}
         </div>
 
-        <button className="block px-4 py-2 bg-blue-600 text-white rounded-md mt-5">
+        <button className="block px-4 py-2 bg-blue-600 text-white rounded-md">
           Upload to product
         </button>
       </form>

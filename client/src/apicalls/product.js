@@ -67,3 +67,31 @@ export const uploadImages = async (formData) => {
     return error.message;
   }
 };
+
+// get saved product images
+export const getSavedImages = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/product-images/${id}`, {
+      validateStatus: () => true,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+// delete saved product images
+export const deleteSavedImages = async (payload) => {
+  try {
+    const { productId, imgToDelete } = payload;
+
+    const encodeImgToDelete = encodeURIComponent(imgToDelete);
+
+    const response = await axiosInstance.delete(
+      `/products/images/destroy/${productId}/${encodeImgToDelete}`
+    );
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

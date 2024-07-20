@@ -11,6 +11,7 @@ const Index = () => {
   const [products, setProducts] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
+  const [manageTabKey, setManageTabKey] = useState("1");
 
   const getProducts = async () => {
     try {
@@ -27,6 +28,11 @@ const Index = () => {
 
   useEffect(
     (_) => {
+      if (activeTabKey === "1") {
+        setEditMode(false);
+        setEditProductId(null);
+        setManageTabKey("1");
+      }
       getProducts();
     },
     [activeTabKey]
@@ -43,6 +49,7 @@ const Index = () => {
           setEditMode={setEditMode}
           setEditProductId={setEditProductId}
           getProducts={getProducts}
+          setManageTabKey={setManageTabKey}
         />
       ),
     },
@@ -55,6 +62,7 @@ const Index = () => {
           getProducts={getProducts}
           editMode={editMode}
           editProductId={editProductId}
+          manageTabKey={manageTabKey}
         />
       ),
     },
@@ -71,9 +79,7 @@ const Index = () => {
   ];
 
   const onChangeHandler = (key) => {
-    setEditMode(false);
     setActiveTabKey(key);
-    setEditProductId(products._id);
   };
 
   return (

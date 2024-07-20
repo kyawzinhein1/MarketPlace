@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ProductForm from "../../components/ProductForm";
 import { Tabs } from "antd";
 import Upload from "../../components/Upload";
@@ -8,9 +7,8 @@ const ManageProduct = ({
   getProducts,
   editMode,
   editProductId,
+  manageTabKey,
 }) => {
-  const [productActiveTabKey, setProductActiveTabKey] = useState("1");
-
   const items = [
     {
       key: "1",
@@ -38,18 +36,7 @@ const ManageProduct = ({
       : null,
   ];
 
-  const onChangeHandler = (key) => {
-    setProductActiveTabKey(key);
-    // setEditProductId(products._id);
-  };
-
-  return (
-    <Tabs
-      activeKey={productActiveTabKey}
-      onChange={onChangeHandler}
-      items={items}
-    />
-  );
+  return <Tabs defaultActiveKey={manageTabKey} items={items} />;
 };
 
 export default ManageProduct;

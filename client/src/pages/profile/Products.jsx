@@ -8,11 +8,20 @@ const Products = ({
   setEditMode,
   setEditProductId,
   getProducts,
+  setManageTabKey,
 }) => {
   const editHandler = (product_id) => {
     setEditProductId(product_id);
     setEditMode(true);
     setActiveTabKey("2");
+    setManageTabKey("1");
+  };
+
+  const uploadHandler = (product_id) => {
+    setEditMode(true);
+    setActiveTabKey("2");
+    setEditProductId(product_id);
+    setManageTabKey("2");
   };
 
   const deleteHandler = async (product_id) => {
@@ -84,11 +93,11 @@ const Products = ({
                       )}
                     </td>
                     <td className="px-6 py-4">
-                    <button
+                      <button
                         type="button"
                         className="font-medium text-green-600 hover:underline me-4"
                         onClick={() => {
-                          editHandler(product._id);
+                          uploadHandler(product._id);
                         }}
                       >
                         Upload

@@ -85,4 +85,12 @@ router.delete("/products/:id", authMiddleware, productController.deleteProduct);
 // POST /upload
 router.post("/upload", authMiddleware, productController.uploadProductImages);
 
+// get product images
+// GET /product-images/:id
+router.get("/product-images/:id", authMiddleware, productController.getProductImages)
+
+// delete product images
+// DELETE /products/images/destroy/:productId/:imgToDelete
+router.delete("/products/images/destroy/:productId/:imgToDelete", productController.deleteProductImages)
+
 module.exports = router;
