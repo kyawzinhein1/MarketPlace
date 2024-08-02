@@ -1,49 +1,11 @@
 import moment from "moment";
-import { deleteProduct } from "../../apicalls/product";
-import { message } from "antd";
 import {
   ArrowUpCircleIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
 
-const Products = ({
-  products,
-  setActiveTabKey,
-  setEditMode,
-  setEditProductId,
-  getProducts,
-  setManageTabKey,
-}) => {
-  const editHandler = (product_id) => {
-    setEditProductId(product_id);
-    setEditMode(true);
-    setActiveTabKey("2");
-    setManageTabKey("1");
-  };
-
-  const uploadHandler = (product_id) => {
-    setEditMode(true);
-    setActiveTabKey("2");
-    setEditProductId(product_id);
-    setManageTabKey("2");
-  };
-
-  const deleteHandler = async (product_id) => {
-    try {
-      const response = await deleteProduct(product_id);
-      if (response.isSuccess) {
-        message.success(response.message);
-        getProducts();
-        setActiveTabKey("1");
-      } else {
-        throw new Error(response.message);
-      }
-    } catch (err) {
-      message.error(err.message);
-    }
-  };
-
+const Products = ({ products }) => {
   return (
     <section>
       <h1 className="text-xl font-bold my-3">Products List</h1>
@@ -56,6 +18,9 @@ const Products = ({
               </th>
               <th scope="col" className="px-6 py-3 text-center">
                 Category
+              </th>
+              <th scope="col" className="px-6 py-3 text-center">
+                Seller
               </th>
               <th scope="col" className="px-6 py-3 text-center">
                 Sell Date
@@ -83,6 +48,7 @@ const Products = ({
                       {product.name}
                     </td>
                     <td className="px-6 py-4">{product.category}</td>
+                    <td className="px-6 py-4">{product.seller.name}</td>
                     <td className="px-6 py-4">
                       {moment(product.createdAt).format("L")}
                     </td>
