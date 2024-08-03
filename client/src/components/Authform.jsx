@@ -11,7 +11,6 @@ const Authform = ({ isLoginPage }) => {
   const navigate = useNavigate();
 
   const { isProcessing } = useSelector((state) => state.reducer.loader);
-  // console.log(isProcessing);
 
   const handleOnFinish = async (values) => {
     dispatch(setLoader(true));

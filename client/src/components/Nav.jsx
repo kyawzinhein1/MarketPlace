@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 const Nav = () => {
-  const { user } = useSelector((state) => state.reducer.user);
+  const user = useSelector((state) => state.reducer.user.user);
   // console.log(user.role);
 
   return (
@@ -14,7 +14,7 @@ const Nav = () => {
 
       {user ? (
         <>
-          {user.role === "user" && (
+          {user.role == "user" ? (
             <Link
               to={"/profile"}
               className="flex items-center justify-center gap-1 text-white"
@@ -22,8 +22,7 @@ const Nav = () => {
               <UserCircleIcon width={20} />
               Profile
             </Link>
-          )}
-          {user.role === "admin" && (
+          ) : (
             <Link
               to={"/admin"}
               className="flex items-center justify-center gap-1 text-white"

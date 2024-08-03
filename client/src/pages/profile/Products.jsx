@@ -2,7 +2,7 @@ import moment from "moment";
 import { deleteProduct } from "../../apicalls/product";
 import { message } from "antd";
 import {
-  ArrowUpCircleIcon,
+  CloudArrowUpIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
@@ -87,12 +87,18 @@ const Products = ({
                       {moment(product.createdAt).format("L")}
                     </td>
                     <td className="px-6 py-4">
-                      {product.status === "pending" ? (
-                        <span className="bg-yellow-400 p-1 text-xs font-mono text-white rounded-md">
+                      {product.status === "pending" && (
+                        <span className=" bg-yellow-400 text-xs p-1 rounded-md text-white">
                           {product.status}
                         </span>
-                      ) : (
-                        <span className="bg-green-400 p-1 text-xs font-mono text-white rounded-md">
+                      )}{" "}
+                      {product.status === "approve" && (
+                        <span className="bg-green-400 text-xs p-1 rounded-md text-white">
+                          {product.status}
+                        </span>
+                      )}
+                      {product.status === "reject" && (
+                        <span className="bg-red-400 text-xs p-1 rounded-md text-white">
                           {product.status}
                         </span>
                       )}
@@ -100,33 +106,33 @@ const Products = ({
                     <td className="px-6 py-4">
                       <button
                         type="button"
-                        className="font-medium text-green-600 hover:underline me-4"
+                        className="font-medium text-green-600 hover:text-green-800 me-3"
                         onClick={() => {
                           uploadHandler(product._id);
                         }}
                         title="Upload"
                       >
-                        <ArrowUpCircleIcon width={20} />
+                        <CloudArrowUpIcon width={26} />
                       </button>
                       <button
                         type="button"
-                        className="font-medium text-blue-600 hover:underline me-4"
+                        className="font-medium text-blue-600 hover:text-blue-800 me-3"
                         onClick={() => {
                           editHandler(product._id);
                         }}
                         title="Edit"
                       >
-                        <PencilSquareIcon width={20} />
+                        <PencilSquareIcon width={26} />
                       </button>
                       <button
                         type="button"
-                        className="font-medium text-red-600 hover:underline"
+                        className="font-medium text-red-600 hover:text-red-800 transition-all"
                         onClick={() => {
                           deleteHandler(product._id);
                         }}
                         title="Delete"
                       >
-                        <TrashIcon width={20} />
+                        <TrashIcon width={26} />
                       </button>
                     </td>
                   </tr>
