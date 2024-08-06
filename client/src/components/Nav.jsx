@@ -20,7 +20,7 @@ const Nav = () => {
               className="flex items-center justify-center gap-1 text-white"
             >
               <UserCircleIcon width={20} />
-              Profile
+              User Panal
             </Link>
           ) : (
             <Link

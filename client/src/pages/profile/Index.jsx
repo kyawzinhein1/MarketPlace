@@ -73,7 +73,7 @@ const Index = () => {
     },
     {
       key: "4",
-      label: "General",
+      label: "Profile",
       children: <General />,
     },
   ];
