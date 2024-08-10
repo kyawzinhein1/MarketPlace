@@ -29,7 +29,7 @@ const Dashboard = ({ products, users }) => {
   }, [products]);
 
   return (
-    <section>
+    <section className="px-4">
       <div className="flex items-center gap-6">
         <CardUsageExample
           title={"Total Sales"}
@@ -50,8 +50,8 @@ const Dashboard = ({ products, users }) => {
           note={"Items"}
         />
       </div>
-      <Chart />
-      <Bar />
+      <Chart products={products} />
+      <Bar products={products} />
     </section>
   );
 };

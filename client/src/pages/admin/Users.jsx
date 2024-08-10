@@ -52,7 +52,7 @@ const Users = () => {
   };
 
   return (
-    <section>
+    <section className="px-4">
       <h1 className="text-xl font-bold my-3">User List</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 ">

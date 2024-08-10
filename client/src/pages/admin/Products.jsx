@@ -55,7 +55,7 @@ const Products = ({ products, getProducts }) => {
   };
 
   return (
-    <section>
+    <section className="px-4">
       <h1 className="text-xl font-bold my-3">Products List</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
