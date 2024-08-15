@@ -2,6 +2,7 @@ import { Card, Title, LineChart } from "@tremor/react";
 import { format } from "date-fns";
 
 const Chart = ({ products }) => {
+  
   // get date from last 1 week
   const currentDate = new Date(); // current date
   const lastOneWeek = new Date();

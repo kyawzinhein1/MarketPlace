@@ -1,10 +1,10 @@
 import { Form, Input, message } from "antd";
-import { loginUser, registerUser } from "../apicalls/auth";
+import { loginUser, registerUser } from "../../apicalls/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { setUser } from "../store/slices/userSlice";
+import { setUser } from "../../store/slices/userSlice";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setLoader } from "../store/slices/loaderSlice";
+import { setLoader } from "../../store/slices/loaderSlice";
 
 const Authform = ({ isLoginPage }) => {
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const Authform = ({ isLoginPage }) => {
     dispatch(setLoader(false));
   };
   return (
-    <section className="h-screen w-full flex items-center justify-center">
+    <section className="w-full flex mt-[100px] justify-center">
       <div className="w-[330px] rounded-md">
         <h1 className="text-center font-bold text-3xl text-blue-500 mb-3">
           POINT.IO - {isLoginPage ? "LOGIN" : "REGISTER"}

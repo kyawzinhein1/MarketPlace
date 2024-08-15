@@ -1,9 +1,9 @@
 import { axiosInstance } from "./axiosInstance";
 
 // get all products
-export const getAllProducts = async (payload) => {
+export const getAllProducts = async () => {
   try {
-    const response = await axiosInstance.get("/admin/products", payload, {
+    const response = await axiosInstance.get("/admin/products", {
       validateStatus: () => true,
     });
     return response.data;

@@ -4,7 +4,7 @@ module.exports = async (req, res, next) => {
   try {
     const { userId } = req;
     const userDoc = await User.findById(userId).select("role");
-    console.log(userDoc);
+    // console.log(userDoc);
     if (userDoc.role !== "admin") {
       throw new Error("Unauthorized admin.");
     }

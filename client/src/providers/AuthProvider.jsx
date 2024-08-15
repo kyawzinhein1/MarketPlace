@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log(err.message);
+      return err.message;
     }
   };
 

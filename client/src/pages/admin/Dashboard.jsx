@@ -1,11 +1,11 @@
-import { CardUsageExample } from "../../components/dashboard/Card";
+import { CardUsageExample } from "../../components/Dashboard/Card";
 import {
   BanknotesIcon,
   UserGroupIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
-import Chart from "../../components/dashboard/Chart";
-import Bar from "../../components/dashboard/Bar";
+import Chart from "../../components/Dashboard/Chart";
+import Bar from "../../components/Dashboard/Bar";
 import { useEffect, useState } from "react";
 
 const Dashboard = ({ products, users }) => {

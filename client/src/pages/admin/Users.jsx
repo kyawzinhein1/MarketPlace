@@ -11,6 +11,7 @@ const Users = () => {
       const response = await getAllUsers();
       if (response.isSuccess) {
         setUsers(response.userDocs);
+        
       } else {
         throw new Error(response.message);
       }
@@ -146,7 +147,7 @@ const Users = () => {
                 ))}
               </>
             ) : (
-              <p>No proudcts added yet.</p>
+              <p>No users found.</p>
             )}
           </tbody>
         </table>
