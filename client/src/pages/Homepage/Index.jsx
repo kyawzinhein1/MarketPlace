@@ -43,8 +43,12 @@ const Index = () => {
 
   return (
     <div>
-      <Hero />
-      <Filter categories={categories} />
+      <Hero setProducts={setProducts} getAllProducts={getAllProducts} />
+      <Filter
+        categories={categories}
+        setProducts={setProducts}
+        getAllProducts={getAllProducts}
+      />
       <div className="flex max-w-xl mx-auto flex-row flex-wrap ">
         {products.map((product) => (
           <Card product={product} key={product._id} />

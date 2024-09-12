@@ -11,7 +11,7 @@ const Nav = () => {
       <Link to={"/"} className="font-bold text-2xl">
         TRADE HUB
       </Link>
-      <div className="flex items-center gap-3">
+      <div className="hidden sm:flex items-center gap-3">
         <Link to={"about"} className=" hover:font-bold transition-all">
           About
         </Link>

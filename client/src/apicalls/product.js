@@ -115,3 +115,25 @@ export const getProducts = async () => {
     return error.message;
   }
 };
+
+// get all products by filter
+export const getProductsByFilter = async (key, value) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/products/filters?${key}=${value}`
+    );
+    return response.data;
+  } catch (err) {
+    return err.message;
+  }
+};
+
+// get product by id
+export const getProductById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/api/products/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
