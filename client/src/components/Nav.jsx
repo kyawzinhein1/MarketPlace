@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon, BookmarkIcon } from "@heroicons/react/24/solid";
 
 const Nav = () => {
   const user = useSelector((state) => state.reducer.user.user);
@@ -23,7 +23,7 @@ const Nav = () => {
         </Link>
       </div>
       {user && (
-        <>
+        <div className="flex items-center gap-2">
           {user.role === "user" ? (
             <Link to={"/profile"} className="  px-2 py-1 flex items-end gap-1">
               <UserCircleIcon width={26} />
@@ -36,7 +36,14 @@ const Nav = () => {
               Admin Pannel
             </Link>
           )}
-        </>
+          <Link
+            to={"/saved-products"}
+            className="px-2 py-1 flex items-end gap-1"
+            title="Save Products"
+          >
+            <BookmarkIcon width={26} />
+          </Link>
+        </div>
       )}
       {!user && (
         <div className="flex items-center justify-center gap-3 text-base font-medium text-blue-">

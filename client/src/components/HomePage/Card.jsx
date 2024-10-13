@@ -1,10 +1,33 @@
 import noItem from "../../images/noItem.png";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon, BookmarkSlashIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { deleteSavedProduct, savedProduct } from "../../apicalls/product";
+import { message } from "antd";
 
-const Card = ({ product }) => {
+const Card = ({ product, saved = false, onRemove }) => {
+  const ProductStatusHandler = async (id) => {
+    try {
+      let response;
+      if (saved) {
+        response = await deleteSavedProduct(id);
+      } else {
+        response = await savedProduct(id);
+      }
+      if (response.isSuccess) {
+        message.success(response.message);
+        if (saved && onRemove) {
+          onRemove(id);
+        }
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
   return (
-    <section className="basis-1/2 px-4 mb-4 mt-8">
+    <section className={` ${saved ? "basis-1/4" : "basis-1/2"} px-4 mb-4`}>
       {product.images[0] ? (
         <Link to={`/products/${product._id}`}>
           <img
@@ -18,6 +41,7 @@ const Card = ({ product }) => {
           <img src={noItem} alt={product.name} className="w-full opacity-50" />
         </Link>
       )}
+
       <p className="text-white text-sm bg-blue-600 rounded-lg p-1 w-fit my-2">
         {product.category.toUpperCase().replaceAll("_", " ")}
       </p>
@@ -25,7 +49,22 @@ const Card = ({ product }) => {
         <Link to={`/products/${product._id}`}>
           <p className=" text-xl font-bold text-gray-700">{product.name}</p>
         </Link>
-        <BookmarkIcon className="w-8 h-8 text-blue-600 cursor-pointer" />
+
+        {saved ? (
+          <BookmarkSlashIcon
+            className="w-6 h-8 text-blue-600 cursor-pointer"
+            onClick={() => {
+              ProductStatusHandler(product._id);
+            }}
+          />
+        ) : (
+          <BookmarkIcon
+            className="w-6 h-8 text-blue-600 cursor-pointer"
+            onClick={() => {
+              ProductStatusHandler(product._id);
+            }}
+          />
+        )}
       </div>
       <p className="text-gray-500">{product.description.slice(0, 80)}</p>
     </section>

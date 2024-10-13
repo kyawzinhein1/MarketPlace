@@ -2,8 +2,12 @@ import { useState } from "react";
 import { getProductsByFilter } from "../../apicalls/product";
 import { message } from "antd";
 
+import { useDispatch } from "react-redux";
+import { setLoader } from "../../store/slices/loaderSlice";
+
 const Filter = ({ categories, setProducts, getAllProducts }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const dispatch = useDispatch();
 
   // Normalize and extract unique categories
   const uniqueCategories = [
@@ -20,6 +24,7 @@ const Filter = ({ categories, setProducts, getAllProducts }) => {
   ];
 
   const categoryHandler = async (i) => {
+    dispatch(setLoader(true));
     try {
       setSelectedCategory(originalCategories[i]);
       const response = await getProductsByFilter("category", selectedCategory);
@@ -31,6 +36,7 @@ const Filter = ({ categories, setProducts, getAllProducts }) => {
     } catch (err) {
       message.error(err.message);
     }
+    dispatch(setLoader(false));
   };
 
   const clearHandler = () => {
