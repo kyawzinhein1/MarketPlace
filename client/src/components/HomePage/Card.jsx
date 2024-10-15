@@ -1,10 +1,14 @@
 import noItem from "../../images/noItem.png";
 import { BookmarkIcon, BookmarkSlashIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookMark } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { deleteSavedProduct, savedProduct } from "../../apicalls/product";
 import { message } from "antd";
+import { useSelector } from "react-redux";
 
-const Card = ({ product, saved = false, onRemove }) => {
+const Card = ({ product, saved = false, onRemove, savedProducts }) => {
+  const user = useSelector((state) => state.reducer.user.user);
+
   const ProductStatusHandler = async (id) => {
     try {
       let response;
@@ -13,6 +17,7 @@ const Card = ({ product, saved = false, onRemove }) => {
       } else {
         response = await savedProduct(id);
       }
+
       if (response.isSuccess) {
         message.success(response.message);
         if (saved && onRemove) {
@@ -22,23 +27,31 @@ const Card = ({ product, saved = false, onRemove }) => {
         throw new Error(response.message);
       }
     } catch (error) {
-      message.error(error.message);
+      message.error(error.message || "Something went wrong.");
     }
   };
 
+  const isProductSaved = (product) => {
+    return savedProducts.some((p) => p.product_id._id === product._id);
+  };
+
   return (
-    <section className={` ${saved ? "basis-1/4" : "basis-1/2"} px-4 mb-4`}>
+    <section className={` bg-white p-4 rounded-lg`}>
       {product.images[0] ? (
         <Link to={`/products/${product._id}`}>
           <img
             src={product.images[0]}
             alt={product.name}
-            className="w-full h-36 object-cover"
+            className="w-full h-36 object-cover rounded-lg"
           />
         </Link>
       ) : (
         <Link to={`/products/${product._id}`}>
-          <img src={noItem} alt={product.name} className="w-full opacity-50" />
+          <img
+            src={noItem}
+            alt={product.name}
+            className="w-full h-36 object-cover opacity-50 rounded-lg"
+          />
         </Link>
       )}
 
@@ -49,24 +62,34 @@ const Card = ({ product, saved = false, onRemove }) => {
         <Link to={`/products/${product._id}`}>
           <p className=" text-xl font-bold text-gray-700">{product.name}</p>
         </Link>
-
-        {saved ? (
-          <BookmarkSlashIcon
-            className="w-6 h-8 text-blue-600 cursor-pointer"
-            onClick={() => {
-              ProductStatusHandler(product._id);
-            }}
-          />
-        ) : (
-          <BookmarkIcon
-            className="w-6 h-8 text-blue-600 cursor-pointer"
-            onClick={() => {
-              ProductStatusHandler(product._id);
-            }}
-          />
-        )}
+        {user ? (
+          saved ? (
+            <BookmarkSlashIcon
+              className="w-6 h-8 text-blue-600 cursor-pointer"
+              onClick={() => ProductStatusHandler(product._id)}
+            />
+          ) : (
+            <>
+              {isProductSaved(product) ? (
+                <BookMark
+                  className="w-6 h-8 text-blue-600"
+                  onClick={() => message.warning("Product is already saved!!")}
+                />
+              ) : (
+                <BookmarkIcon
+                  className="w-6 h-8 text-blue-600 cursor-pointer"
+                  onClick={() => ProductStatusHandler(product._id)}
+                />
+              )}
+            </>
+          )
+        ) : null}
       </div>
-      <p className="text-gray-500">{product.description.slice(0, 80)}</p>
+      <p className="text-gray-500 mb-2">{product.description.slice(0, 80)}</p>
+      <hr />
+      <p className="text-gray-600 text-lg font-semibold mt-3 text-right">
+        {product.price} MMK
+      </p>
     </section>
   );
 };

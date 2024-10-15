@@ -272,6 +272,14 @@ exports.savedProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const isExists = await SavedProduct.findOne({
+      $and: [{ user_id: req.userId }, { product_id: id }],
+    });
+
+    if (isExists) {
+      throw new Error("Product is already saved.");
+    }
+
     await SavedProduct.create({
       user_id: req.userId,
       product_id: id,
@@ -293,7 +301,7 @@ exports.getSavedProducts = async (req, res) => {
   try {
     const productDocs = await SavedProduct.find({
       user_id: req.userId,
-    }).populate("product_id", "name category images description");
+    }).populate("product_id", "name category images description price");
 
     if (!productDocs || productDocs.length === 0) {
       throw new Error("No products are not saved yet.");
