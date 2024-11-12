@@ -28,22 +28,22 @@ const Index = () => {
         throw new error(response.message);
       }
     } catch (err) {
-      message.error(err.message);
+      console.error(err.message);
     }
     dispatch(setLoader(false));
   };
 
-  const getAllProducts = async () => {
+  const getAllProducts = async (category = "") => {
     dispatch(setLoader(true));
     try {
-      const response = await getProducts();
+      const response = await getProducts(category);
       if (response.isSuccess) {
         setProducts(response.productDocs);
       } else {
         throw new error(response.message);
       }
     } catch (err) {
-      message.error(err.message);
+      console.error(err.message);
     }
     dispatch(setLoader(false));
   };
@@ -58,7 +58,7 @@ const Index = () => {
         throw new error(response.message);
       }
     } catch (err) {
-      message.error(err.message);
+      console.error(err.message); 
     }
     dispatch(setLoader(false));
   };

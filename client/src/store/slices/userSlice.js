@@ -11,10 +11,10 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    clearUser(state) {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
+    // clearUser(state) {
+    //   state.user = null;
+    //   state.isAuthenticated = false;
+    // },
   },
 });
 

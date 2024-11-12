@@ -4,7 +4,10 @@ const { body } = require("express-validator");
 const router = Router();
 
 const productController = require("../controllers/product");
+const bidController = require("../controllers/bid");
+
 const authMiddleware = require("../middlewares/auth");
+const notificationController = require("../controllers/notifications");
 
 // add product
 //POST  /create-product
@@ -122,6 +125,37 @@ router.delete(
   "/unsaved-products/:id",
   authMiddleware,
   productController.unSavedProduct
+);
+
+// save new bid
+// POST /add-bid
+router.post(
+  "/add-bid",
+  [
+    body("message").trim().notEmpty().withMessage("message name must have."),
+    body("phone")
+      .trim()
+      .notEmpty()
+      .withMessage("phone number price must have."),
+  ],
+  authMiddleware,
+  bidController.savedNewBid
+);
+
+// get all bids
+// GET /bids/:product_id
+router.get("/bids/:product_id", bidController.getAllBids);
+
+// push noti
+// POST /notify
+router.post("/notify", authMiddleware, notificationController.pushNotification);
+
+// get noti
+// GET /notification
+router.get(
+  "/notifications",
+  authMiddleware,
+  notificationController.getNotifications
 );
 
 module.exports = router;

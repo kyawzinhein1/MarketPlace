@@ -24,21 +24,32 @@ const Filter = ({ categories, setProducts, getAllProducts }) => {
   ];
 
   const categoryHandler = async (i) => {
+    const category = originalCategories[i];
+    setSelectedCategory(category);
     dispatch(setLoader(true));
+  
     try {
-      setSelectedCategory(originalCategories[i]);
-      const response = await getProductsByFilter("category", selectedCategory);
-      if (response.isSuccess) {
-        setProducts(response.productDocs);
+      const response = await getProductsByFilter("category", category);
+      
+      if (response && response.isSuccess) {
+        if (response.productDocs && response.productDocs.length > 0) {
+          setProducts(response.productDocs);
+        } else {
+          // No products found for the selected category
+          setProducts([]); // Clear the products list
+          message.warning("No products found for the selected category.");
+        }
       } else {
-        throw new Error(response.message);
+        // Show the error message if response is unsuccessful
+        throw new Error(response ? response.message : "Failed to fetch products.");
       }
     } catch (err) {
-      message.error(err.message);
+      message.error(err.message || "No products are found in selected category.");
     }
+    
     dispatch(setLoader(false));
   };
-
+  
   const clearHandler = () => {
     setSelectedCategory("");
     getAllProducts();

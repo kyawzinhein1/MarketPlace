@@ -38,11 +38,11 @@ const Nav = () => {
       {user && (
         <div className="flex items-center gap-2">
           {user.role === "user" ? (
-            <Link to={"/profile"} className="  px-2 py-1 flex items-end gap-1">
+            <Link to="/profile" className="px-2 py-1 flex items-end gap-1">
               <UserCircleIcon width={26} />
             </Link>
           ) : (
-            <Link to={"/admin"} className="  px-2 py-1 flex items-end gap-1">
+            <Link to="/admin" className="px-2 py-1 flex items-end gap-1">
               <UserCircleIcon width={26} />
             </Link>
           )}
