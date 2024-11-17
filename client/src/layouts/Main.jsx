@@ -5,7 +5,7 @@ const Main = () => {
   return (
     <section className="max-w-full mx-auto">
       <Nav/>
-      <Outlet />
+      <Outlet/>
     </section>
   );
 };

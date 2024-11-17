@@ -4,14 +4,14 @@ import {
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/solid";
-import { message } from "antd";
+import { message, Pagination } from "antd";
 import {
   approveProduct,
   rejectProduct,
   rollBackProduct,
 } from "../../apicalls/admin";
 
-const Products = ({ products, getProducts }) => {
+const Products = ({ products, getProducts, currentPage, totalPages }) => {
   const approveHandler = async (productId) => {
     try {
       const response = await approveProduct(productId);
@@ -52,6 +52,10 @@ const Products = ({ products, getProducts }) => {
     } catch (err) {
       message.error(err.message);
     }
+  };
+
+  const handlePagination = (page, perPage) => {
+    getProducts(page, perPage);
   };
 
   return (
@@ -190,6 +194,13 @@ const Products = ({ products, getProducts }) => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-end mb-14 mt-10">
+      <Pagination
+        current={currentPage}
+        total={totalPages * 10}
+        onChange={handlePagination}
+      />
       </div>
     </section>
   );

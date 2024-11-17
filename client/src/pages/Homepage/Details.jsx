@@ -1,5 +1,5 @@
-import { Form, Input, Layout, message } from "antd";
-import React, { useEffect, useState } from "react";
+import { Form, Input, message } from "antd";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductById } from "../../apicalls/product";
 import NoItem from "../../images/noItem.png";

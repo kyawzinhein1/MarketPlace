@@ -32,10 +32,10 @@ const Hero = ({ setProducts, getAllProducts }) => {
 
   return (
     <div className="w-full text-center mb-2 mt-3">
-      <h1 className="text-2xl font-bold text-blue-600 mb-4">
+      <h1 className="text-3xl font-bold text-blue-600 mb-4">
         "Discover, Connect, and Thrive with TradeHub"
       </h1>
-      <p className=" text-lg font-medium text-gray-500 max-w-xl mx-auto mb-4">
+      <p className=" text-lg font-medium text-gray-500 max-w-5xl mx-auto mb-4">
         Bings buyers and sellers together, providing trust, community, and
         success. Explore, connect, and thrive with us.
       </p>

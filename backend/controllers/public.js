@@ -16,13 +16,28 @@ exports.getCategories = async (req, res) => {
 };
 
 exports.getProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const perPage = 6;
+
   try {
-    const productDocs = await Product.find({ status: "approve" }).sort({
-      createdAt: -1,
-    });
+    const productDocs = await Product.find({ status: "approve" })
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+
+    const totalProducts = await Product.find({
+      status: "approve",
+    }).countDocuments();
+    const totalPages = Math.ceil(totalProducts / perPage);
+
     return res.status(200).json({
       isSuccess: true,
       productDocs,
+      totalPages,
+      currentPage: page,
+      totalProducts,
     });
   } catch (err) {
     return res.status(422).json({

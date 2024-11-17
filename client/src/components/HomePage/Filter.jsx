@@ -27,36 +27,39 @@ const Filter = ({ categories, setProducts, getAllProducts }) => {
     const category = originalCategories[i];
     setSelectedCategory(category);
     dispatch(setLoader(true));
-  
+
     try {
       const response = await getProductsByFilter("category", category);
-      
+
       if (response && response.isSuccess) {
         if (response.productDocs && response.productDocs.length > 0) {
           setProducts(response.productDocs);
         } else {
-          // No products found for the selected category
-          setProducts([]); // Clear the products list
+          setProducts([]);
           message.warning("No products found for the selected category.");
         }
       } else {
         // Show the error message if response is unsuccessful
-        throw new Error(response ? response.message : "Failed to fetch products.");
+        throw new Error(
+          response ? response.message : "Failed to fetch products."
+        );
       }
     } catch (err) {
-      message.error(err.message || "No products are found in selected category.");
+      message.error(
+        err.message || "No products are found in selected category."
+      );
     }
-    
+
     dispatch(setLoader(false));
   };
-  
+
   const clearHandler = () => {
     setSelectedCategory("");
     getAllProducts();
   };
 
   return (
-    <section className="flex gap-2 max-w-3xl flex-wrap items-center mx-auto justify-center mt-4">
+    <section className="flex gap-2 max-w-5xl flex-wrap items-center mx-auto justify-center mt-4">
       {uniqueCategories.map((category, index) => (
         <p
           key={index}
@@ -71,13 +74,15 @@ const Filter = ({ categories, setProducts, getAllProducts }) => {
           {category}
         </p>
       ))}
-      <button
-        type="button"
-        className="px-2 py-1 rounded-md text-sm cursor-pointer  border border-blue-600 text-blue-600"
-        onClick={clearHandler}
-      >
-        Clear
-      </button>
+      {selectedCategory && (
+        <button
+          type="button"
+          className="px-2 py-1 rounded-md text-sm cursor-pointer  border border-blue-600 text-blue-600"
+          onClick={clearHandler}
+        >
+          Clear
+        </button>
+      )}
     </section>
   );
 };

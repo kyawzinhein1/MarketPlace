@@ -20,7 +20,7 @@ const Nav = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-transparent backdrop-blur-sm z-50 flex items-center justify-between text-blue-600 px-4 py-2">
+    <nav className="fixed top-0 left-0 w-full bg-white bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-between text-blue-600 p-2">
       <Link to={"/"} className="font-bold text-2xl">
         TRADE HUB
       </Link>
