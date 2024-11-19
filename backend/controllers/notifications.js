@@ -1,7 +1,6 @@
 const Notification = require("../models/Notifications");
 
 exports.pushNotification = async (req, res) => {
-
   const { title, message, owner_id, product_id, phone_number } = req.body;
   try {
     await Notification.create({
@@ -35,6 +34,45 @@ exports.getNotifications = async (req, res) => {
     return res.status(200).json({
       isSuccess: true,
       notiDocs,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      isSuccess: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.markAsRead = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const notiDocs = await Notification.findById(id);
+    if (!notiDocs) {
+      throw new Error("Notification not found");
+    }
+    notiDocs.isRead = true;
+    notiDocs.save();
+
+    return res.status(200).json({
+      isSuccess: true,
+      message: "Done",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      isSuccess: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteNoti = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const notiDocs = await Notification.findOneAndDelete(id);
+    return res.status(200).json({
+      isSuccess: true,
+      message: "Notification deleted.",
     });
   } catch (error) {
     return res.status(500).json({

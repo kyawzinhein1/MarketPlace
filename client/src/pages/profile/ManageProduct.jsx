@@ -36,7 +36,11 @@ const ManageProduct = ({
       : null,
   ];
 
-  return <Tabs defaultActiveKey={manageTabKey} items={items} />;
+  return (
+    <section className="px-4">
+      <Tabs defaultActiveKey={manageTabKey} items={items} />
+    </section>
+  );
 };
 
 export default ManageProduct;

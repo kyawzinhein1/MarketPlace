@@ -19,3 +19,23 @@ export const getAllNoti = async () => {
     return error.message;
   }
 };
+
+// make noti as read
+export const makeRead = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/notifications-read/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+// delete noti
+export const deleteNoti = async (id) => {
+  try {
+    const response = await axiosInstance.delete(`/notification-delete/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

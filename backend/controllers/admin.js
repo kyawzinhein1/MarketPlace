@@ -13,6 +13,9 @@ exports.getAllProducts = async (req, res) => {
       .limit(perPage);
 
     const totalProducts = await Product.countDocuments();
+    const pendingProducts = await Product.find({
+      status: "pending",
+    }).countDocuments();
     const totalPages = Math.ceil(totalProducts / perPage);
 
     return res.status(200).json({
@@ -21,6 +24,7 @@ exports.getAllProducts = async (req, res) => {
       totalPages,
       currentPage: page,
       totalProducts,
+      pendingProducts,
     });
   } catch (err) {
     return res.status(422).json({

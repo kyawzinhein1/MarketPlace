@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Notification = ({ notifications }) => {
   return (
-    <section>
+    <section className="px-4">
       <h1 className="text-xl font-bold my-3">Notification</h1>
 
       {!notifications && <p className="text-red-600 text-base">No notification yet.</p>}

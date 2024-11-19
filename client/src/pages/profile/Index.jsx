@@ -10,7 +10,7 @@ import { message } from "antd";
 import {
   BellAlertIcon,
   Square3Stack3DIcon,
-  UsersIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { ArrowTrendingUpIcon } from "@heroicons/react/24/solid";
 
@@ -86,7 +86,7 @@ const Index = () => {
       label: (
         <span className="flex items-start gap-2">
           <ArrowTrendingUpIcon width={20} />
-          Manage Product
+          Manage Products
         </span>
       ),
       children: (
@@ -110,13 +110,13 @@ const Index = () => {
           </span>
         </span>
       ),
-      children: <Notification notifications={notification} />,
+      children: <Notification notifications={notification} getNoti={getNoti} />,
     },
     {
       key: "4",
       label: (
         <span className="flex items-start gap-2">
-          <UsersIcon width={20} />
+          <UserIcon width={20} />
           Profile
         </span>
       ),
@@ -129,12 +129,14 @@ const Index = () => {
   };
 
   return (
-    <Tabs
+    <div className="py-4">
+      <Tabs
       activeKey={activeTabKey}
       onChange={onChangeHandler}
       items={items}
       tabPosition="left"
     />
+    </div>
   );
 };
 

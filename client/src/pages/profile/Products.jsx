@@ -1,11 +1,13 @@
 import moment from "moment";
-import { deleteProduct } from "../../apicalls/product";
+import { deleteProduct, getProductsByFilter } from "../../apicalls/product";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
 import {
   CloudArrowUpIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 const Products = ({
   products,
@@ -15,6 +17,9 @@ const Products = ({
   getProducts,
   setManageTabKey,
 }) => {
+  const [searchKey, setSearchKey] = useState("");
+  const dispatch = useDispatch();
+
   const editHandler = (product_id) => {
     setEditProductId(product_id);
     setEditMode(true);
@@ -46,7 +51,9 @@ const Products = ({
 
   return (
     <section className="px-4">
-      <h1 className="text-xl font-bold my-3">Products List</h1>
+      <div className="flex justify-between items-center mb-3">
+        <h1 className="text-xl font-bold my-3">Products List</h1>
+      </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">

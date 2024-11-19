@@ -10,6 +10,13 @@ import { useNavigate } from "react-router-dom";
 import General from "./General";
 import Dashboard from "./Dashboard";
 import { getAllNoti } from "../../apicalls/notification";
+import {
+  ArrowTrendingUpIcon,
+  BellAlertIcon,
+  TableCellsIcon,
+  UserGroupIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 
 const Index = () => {
   const { user } = useSelector((state) => state.reducer.user);
@@ -21,6 +28,8 @@ const Index = () => {
   const [notification, setNotification] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [pendingProducts, setPendingProducts] = useState(0);
 
   const onChangeHandler = (key) => {
     setActiveTabKey(key);
@@ -33,6 +42,8 @@ const Index = () => {
         setProducts(response.productDocs);
         setCurrentPage(response.currentPage);
         setTotalPages(response.totalPages);
+        setTotalProducts(response.totalProducts);
+        setPendingProducts(response.pendingProducts);
       } else {
         throw new error(response.message);
       }
@@ -86,12 +97,30 @@ const Index = () => {
   const items = [
     {
       key: "1",
-      label: "Dashboard",
-      children: <Dashboard products={products} users={users} />,
+      label: (
+        <span className="flex items-start gap-2">
+          <TableCellsIcon width={20} />
+          Dashboard
+        </span>
+      ),
+      children: (
+        <Dashboard
+          products={products}
+          users={users}
+          totalProducts={totalProducts}
+          pendingProducts={pendingProducts}
+          setActiveTabKey={setActiveTabKey}
+        />
+      ),
     },
     {
       key: "2",
-      label: "Manage Products",
+      label: (
+        <span className="flex items-start gap-2">
+          <ArrowTrendingUpIcon width={20} />
+          Manage Products
+        </span>
+      ),
       children: (
         <Products
           products={products}
@@ -103,28 +132,45 @@ const Index = () => {
     },
     {
       key: "3",
-      label: "Manage Users",
+      label: (
+        <span className="flex items-start gap-2">
+          <UserGroupIcon width={20} />
+          Manage Users
+        </span>
+      ),
       children: <Users />,
     },
     {
       key: "4",
-      label: "Notification",
+      label: (
+        <span className="flex items-start gap-2">
+          <BellAlertIcon width={20} />
+          Notification
+        </span>
+      ),
       children: <Notification />,
     },
     {
       key: "5",
-      label: "Profile",
+      label: (
+        <span className="flex items-start gap-2">
+          <UserIcon width={20} />
+          Profile
+        </span>
+      ),
       children: <General />,
     },
   ];
 
   return (
-    <Tabs
+    <div className="py-4">
+      <Tabs
       activeKey={activeTabKey}
       onChange={onChangeHandler}
       items={items}
       tabPosition="left"
     />
+    </div>
   );
 };
 

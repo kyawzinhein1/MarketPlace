@@ -43,26 +43,28 @@ const Hero = ({ setProducts, getAllProducts }) => {
         <div className="relative w-full">
           <input
             type="text"
-            className=" bg-gray-100 outline-none p-1 rounded-lg w-full"
+            className=" bg-gray-100 outline-none p-1 rounded-lg w-full pr-8"
             value={searchKey}
             onChange={(e) => setSearchKey(e.target.value)}
           />
-          <MagnifyingGlassIcon
-            width={20}
-            height={20}
-            className=" text-blue-600 absolute top-1.5 right-2 cursor-pointer"
-            onClick={searchHandler}
-          />
+          {searchKey.length > 0 && (
+            <MagnifyingGlassIcon
+              width={20}
+              height={20}
+              className=" text-blue-600 absolute top-1.5 right-2 cursor-pointer"
+              onClick={searchHandler}
+            />
+          )}
         </div>
-        {searchKey && (
-          <button
-            type="button"
-            className="text-sm text-white bg-blue-600 p-2 rounded-md"
-            onClick={clearHandler}
-          >
-            Clear
-          </button>
-        )}
+        <button
+          type="button"
+          className={`text-sm text-white bg-blue-600 p-2 rounded-md transition-all ${
+            searchKey ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+          onClick={clearHandler}
+        >
+          Clear
+        </button>
       </div>
     </div>
   );
