@@ -190,6 +190,12 @@ exports.uploadProductImages = async (req, res) => {
   const productId = req.body.product_id;
   let secureUrlArray = [];
 
+  const productDoc = await Product.findOne({ _id: productId });
+
+  if (req.userId.toString() !== productDoc.seller.toString()) {
+    throw new Error("Authorization failed.");
+  }
+
   try {
     productImages.forEach((img) => {
       cloudinary.uploader.upload(img.path, async (err, result) => {
@@ -224,7 +230,12 @@ exports.getProductImages = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const productDoc = await Product.findById(id).select("images");
+    const productDoc = await Product.findById(id).select("images seller");
+
+    if (req.userId.toString() !== productDoc.seller.toString()) {
+      throw new Error("Authorization failed.");
+    }
+
     if (!productDoc) {
       throw new Error("Product not found.");
     }
@@ -246,6 +257,12 @@ exports.deleteProductImages = async (req, res) => {
   const decodeImgToDelete = decodeURIComponent(req.params.imgToDelete);
 
   try {
+    const productDoc = await Product.findOne({ _id: productId });
+
+  if (req.userId.toString() !== productDoc.seller.toString()) {
+    throw new Error("Authorization failed.");
+  }
+
     await Product.findByIdAndUpdate(productId, {
       $pull: { images: decodeImgToDelete },
     });
